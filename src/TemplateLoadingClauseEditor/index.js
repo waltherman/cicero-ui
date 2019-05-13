@@ -17,6 +17,22 @@ import PropTypes from 'prop-types';
 import { Icon, Message } from 'semantic-ui-react';
 import { Template } from '@accordproject/cicero-core';
 import ClauseEditor from '../ClauseEditor';
+import FromMarkdown from '@accordproject/markdown-editor/dist/markdown/fromMarkdown';
+import ToMarkdown from '@accordproject/markdown-editor/dist/markdown/toMarkdown';
+import PluginManager from '@accordproject/markdown-editor/dist/PluginManager';
+import List from '@accordproject/markdown-editor/dist/plugins/list';
+
+const plugins = [List()];
+const pluginManager = new PluginManager(plugins);
+const fromMarkdown = new FromMarkdown(pluginManager);
+const toMarkdown = new ToMarkdown(pluginManager);
+
+function roundTrip(markdownText) {
+  const value = fromMarkdown.convert(markdownText);
+  const markdownRound = toMarkdown.convert(value);
+  return markdownRound;
+}
+
 /**
  * TemplateLoader component - used to wrap a ClauseEditor component,
  * taking care of loading a template
@@ -50,13 +66,17 @@ function TemplateLoadingClauseEditor(props) {
       setLoadingTemplate(true);
       Template.fromUrl(props.templateUrl)
         .then((template) => {
+          // Roundtrip grammar
+          const grammar = template.parserManager.getTemplatizedGrammar();
+          const grammarRound = roundTrip(grammar);
+          template.parserManager.buildGrammar(grammarRound);
           setTemplate(template);
           setLoadingTemplate(false);
           console.log('setTemplate');
         })
         .catch((err) => {
           setError(err.message);
-          console.log('setError');
+          console.log('setError' + err.message);
         });
     }
   }, [error, loadingTemplate, props.templateUrl, template]);

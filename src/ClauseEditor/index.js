@@ -17,13 +17,14 @@ import PropTypes from 'prop-types';
 import { MarkdownEditor } from '@accordproject/markdown-editor';
 import { Clause } from '@accordproject/cicero-core';
 import ParseResult from '../ParseResult';
+import List from '@accordproject/markdown-editor/dist/plugins/list';
 
 import './ClauseEditor.css';
 
 /**
- * We don't extend the editor with any custom plugins
+ * We extend the editor with the list plugins
  */
-const plugins = [];
+const plugins = [List()];
 
 /**
  * Clause Editor React component. The component displays the text of the
