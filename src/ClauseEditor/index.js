@@ -48,12 +48,11 @@ function ClauseEditor(props) {
    * Called when the underlying MarkdownEditor changes
    */
   const onChange = useCallback((value, markdown) => {
-    const trimmed = markdown.trim();
-    if (props.template && trimmed !== prevParse) {
+    if (props.template && markdown !== prevParse) {
       try {
         // @ts-ignore
         const ciceroClause = new Clause(props.template);
-        ciceroClause.parse(trimmed);
+        ciceroClause.parse(markdown);
         const parseResult = ciceroClause.getData();
         setParseResult(parseResult);
         console.log('setParseResult');
@@ -64,7 +63,7 @@ function ClauseEditor(props) {
         props.onParse(error);
       }
 
-      setPrevParse(trimmed);
+      setPrevParse(markdown);
     }
     props.onChange(value, markdown);
   }, [prevParse, props]);
