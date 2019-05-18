@@ -7,7 +7,65 @@ exports[`<ClauseEditor /> on initialization renders page correctly 1`] = `
     markdown=""
     markdownMode={false}
     onChange={[Function]}
-    plugins={Array []}
+    plugins={
+      Array [
+        Object {
+          "fromHTML": [Function],
+          "fromMarkdown": [Function],
+          "markdownTags": Array [
+            "list",
+            "item",
+          ],
+          "onKeyDown": [Function],
+          "plugin": "list",
+          "renderBlock": [Function],
+          "schema": Object {
+            "blocks": Object {
+              "list": Object {
+                "nodes": Array [
+                  Object {
+                    "match": Object {
+                      "type": "list_item",
+                    },
+                  },
+                ],
+              },
+              "list_item": Object {
+                "marks": Array [
+                  Object {
+                    "type": "bold",
+                  },
+                  Object {
+                    "type": "italic",
+                  },
+                ],
+                "nodes": Array [
+                  Object {
+                    "match": Array [
+                      Object {
+                        "object": "text",
+                      },
+                      Object {
+                        "type": "link",
+                      },
+                    ],
+                  },
+                ],
+                "parent": Object {
+                  "type": "list",
+                },
+              },
+            },
+          },
+          "tags": Array [
+            "ul",
+            "ol",
+            "li",
+          ],
+          "toMarkdown": [Function],
+        },
+      ]
+    }
     showEditButton={true}
   />
   <ParseResult
