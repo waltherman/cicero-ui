@@ -18,6 +18,7 @@ import { SlateAsInputEditor, List } from '@accordproject/markdown-editor';
 
 import ClausePlugin from '../plugins/ClausePlugin';
 import VariablePlugin from '../plugins/VariablePlugin';
+import ComputedPlugin from '../plugins/ComputedPlugin';
 
 /**
  * Adds the current markdown to local storage
@@ -63,9 +64,9 @@ const ContractEditor = (props) => {
     setPlugins(
       props.plugins
         ? props.plugins.concat(
-          [List(), VariablePlugin(), ClausePlugin(props.loadTemplateObject, props.parseClause)]
+          [List(), ComputedPlugin(), VariablePlugin(), ClausePlugin(props.loadTemplateObject, props.parseClause)]
         )
-        : [List(), VariablePlugin(), ClausePlugin(props.loadTemplateObject, props.parseClause)]
+        : [List(), ComputedPlugin(), VariablePlugin(), ClausePlugin(props.loadTemplateObject, props.parseClause)]
     );
   }, [props.loadTemplateObject, props.parseClause, props.plugins]);
   return (

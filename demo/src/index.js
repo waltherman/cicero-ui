@@ -11,18 +11,19 @@ import ClauseEditor from '../../src/ClauseEditor';
 import ContractEditor from '../../src/ContractEditor';
 import ClausePlugin from '../../src/plugins/ClausePlugin';
 import VariablePlugin from '../../src/plugins/VariablePlugin';
+import ComputedPlugin from '../../src/plugins/ComputedPlugin';
 
 const clausePlugin = ClausePlugin(null, null);
-const plugins = [List(), VariablePlugin(), clausePlugin];
+const plugins = [List(), VariablePlugin(), ComputedPlugin(), clausePlugin];
 const pluginManager = new PluginManager(plugins);
 const fromMarkdown = new FromMarkdown(pluginManager);
 
-const templateUri = 'https://templates.accordproject.org/archives/acceptance-of-delivery@0.12.0.cta';
-const clauseText = `Acceptance of Delivery. "Party A" will be deemed to have completed its delivery obligations if in "Party B"'s opinion, the "Widgets" satisfies the Acceptance Criteria, and "Party B" notifies "Party A" in writing that it is accepting the "Widgets".
-
-Inspection and Notice. "Party B" will have 10 Business Days' to inspect and evaluate the "Widgets" on the delivery date before notifying "Party A" that it is either accepting or rejecting the "Widgets".
-
-Acceptance Criteria. The "Acceptance Criteria" are the specifications the "Widgets" must meet for the "Party A" to comply with its requirements and obligations under this agreement, detailed in "Attachment X", attached to this agreement.`;
+const templateUri = 'https://js-feature-dynamic-templates--templates-accordproject.netlify.com/archives/fixed-interests@0.2.0.cta';
+const clauseText = `This is a fixed interest loan to the amount of 100000
+at the yearly interest rate of 2.5%
+with a loan term of 15,
+and monthly payments of {{gibberish}}
+`;
 
 const getClauseMarkdown = async () => {
   const rewriteClauseText = await clausePlugin.rewriteClause(templateUri, clauseText);

@@ -10,8 +10,9 @@ import '../styles.css';
 import murmurhash3_32_gc from './murmurhash3_gc';
 import ClauseComponent from '../components/ClauseComponent';
 import VariablePlugin from './VariablePlugin';
+import ComputedPlugin from './ComputedPlugin';
 
-const plugins = [List(), VariablePlugin({ rawValue: true })];
+const plugins = [List(), ComputedPlugin({ rawValue: true }), VariablePlugin({ rawValue: true })];
 const pluginManager = new PluginManager(plugins);
 const markdownGenerator = new ToMarkdown(pluginManager);
 
@@ -67,6 +68,8 @@ function ClausePlugin(customLoadTemplate, customParseClause) {
     if (!template) {
       console.log(`Loading template: ${templateUri}`);
       template = await Template.fromUrl(templateUri);
+      template.getLogicManager().addTemplateFile(template.getParserManager().getTemplatizedGrammar().trim(), 'grammar/template.tem');
+      template.getScriptManager().compileLogic(true);
       templates[templateUri] = template;
     }
 
@@ -81,11 +84,14 @@ function ClausePlugin(customLoadTemplate, customParseClause) {
    */
   async function rewriteClause(templateUri, clauseText) {
     try {
+      console.log('rewriteClause input', clauseText);
       const template = await loadTemplate(templateUri);
+      // console.log(template.getScriptManager().getCompiledScript().getContents());
       const clause = new Clause(template);
       clause.parse(clauseText);
-      const variableText = clause.generateText({ wrapVariables: true });
-      console.log(variableText);
+      console.log('parse result', clause.getData());
+      const variableText = await clause.generateText({ wrapVariables: true });
+      console.log('rewriteClause output', variableText);
       return Promise.resolve(variableText);
     } catch (err) {
       console.log(err);
@@ -103,7 +109,7 @@ function ClausePlugin(customLoadTemplate, customParseClause) {
       if (template) {
         console.log(`parseClause: ${templateUri} with ${text}`);
         const clause = new Clause(template);
-        clause.parse(text);
+        clause.parse(text.trim());
         return Promise.resolve(clause.getData());
       }
       return Promise.resolve('Template not loaded.');
@@ -180,6 +186,7 @@ function ClausePlugin(customLoadTemplate, customParseClause) {
 
     console.log('onChange - inside clause', clauseNode.toJSON());
 
+    console.log('parseText', clauseNode.nodes);
     const parseText = markdownGenerator.recursive(clauseNode.nodes);
 
     const nodeAttributes = clauseNode.data.get('attributes');
